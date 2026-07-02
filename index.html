@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iLovePhone — ค้นหาสาขา</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:      #E31837;
+      --red-dark: #B5122A;
+      --red-soft: #fdeaed;
+      --gray-900: #1a1a1a;
+      --gray-700: #3d3d3d;
+      --gray-500: #7a7a7a;
+      --gray-200: #e8e8e8;
+      --gray-100: #f5f5f5;
+      --white:    #ffffff;
+      --shadow:   0 2px 12px rgba(0,0,0,0.10);
+      --shadow-lg:0 8px 32px rgba(0,0,0,0.14);
+      --radius:   12px;
+      --sidebar-w: 360px;
+    }
+
+    html, body { height: 100%; font-family: 'Sarabun', sans-serif; color: var(--gray-900); }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 60px;
+      background: var(--red);
+      display: flex; align-items: center; gap: 12px; padding: 0 20px;
+      box-shadow: 0 2px 8px rgba(227,24,55,0.35);
+    }
+    .header-logo {
+      display: flex; align-items: center; gap: 10px; text-decoration: none;
+    }
+    .logo-icon {
+      width: 34px; height: 34px; background: var(--white);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 13px; color: var(--red); letter-spacing: -0.5px;
+    }
+    .logo-text { color: var(--white); font-weight: 700; font-size: 18px; line-height: 1; }
+    .logo-sub  { color: rgba(255,255,255,0.80); font-size: 11px; font-weight: 400; }
+    header h1  {
+      flex: 1; text-align: right;
+      color: rgba(255,255,255,0.90); font-size: 14px; font-weight: 500;
+    }
+
+    /* ── LAYOUT ── */
+    .app {
+      display: flex;
+      height: 100vh;
+      padding-top: 60px;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--gray-200);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-top {
+      padding: 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+    .search-wrap svg {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--gray-500); pointer-events: none;
+    }
+    #searchInput {
+      width: 100%; height: 42px;
+      border: 1.5px solid var(--gray-200); border-radius: 8px;
+      padding: 0 12px 0 40px;
+      font-family: inherit; font-size: 14px;
+      background: var(--gray-100); color: var(--gray-900);
+      outline: none; transition: border-color 0.2s, background 0.2s;
+    }
+    #searchInput:focus { border-color: var(--red); background: var(--white); }
+    #searchInput::placeholder { color: var(--gray-500); }
+
+    .filter-row {
+      display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 4px 12px; border-radius: 20px; border: 1.5px solid var(--gray-200);
+      font-family: inherit; font-size: 12px; font-weight: 500;
+      cursor: pointer; background: var(--white); color: var(--gray-700);
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--red); color: var(--red); }
+    .filter-btn.active { background: var(--red); border-color: var(--red); color: var(--white); }
+
+    .results-count {
+      font-size: 12px; color: var(--gray-500); margin-top: 8px;
+    }
+
+    /* ── BRANCH LIST ── */
+    .branch-list {
+      flex: 1; overflow-y: auto;
+      padding: 8px 0;
+    }
+    .branch-list::-webkit-scrollbar { width: 4px; }
+    .branch-list::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 2px; }
+
+    .branch-card {
+      padding: 14px 16px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .branch-card:hover { background: var(--gray-100); }
+    .branch-card.active {
+      background: var(--red-soft);
+      border-left-color: var(--red);
+    }
+
+    .branch-header {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+    }
+    .branch-name {
+      font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--gray-900);
+    }
+    .badge {
+      flex-shrink: 0; padding: 2px 8px; border-radius: 20px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+    .badge-owned     { background: #e8f5e9; color: #2e7d32; }
+    .badge-franchise { background: #fff3e0; color: #e65100; }
+    .badge-partner   { background: #e3f2fd; color: #1565c0; }
+
+    .branch-address {
+      font-size: 12px; color: var(--gray-500); margin-top: 4px; line-height: 1.5;
+    }
+    .branch-meta {
+      display: flex; gap: 12px; margin-top: 6px;
+    }
+    .branch-meta span {
+      font-size: 11px; color: var(--gray-500);
+      display: flex; align-items: center; gap: 3px;
+    }
+    .branch-meta svg { width: 11px; height: 11px; }
+
+    .no-results {
+      padding: 40px 16px; text-align: center; color: var(--gray-500);
+    }
+    .no-results svg { margin-bottom: 12px; opacity: 0.4; }
+    .no-results p { font-size: 14px; }
+
+    /* ── MAP ── */
+    .map-container {
+      flex: 1; position: relative; overflow: hidden;
+    }
+    #map { width: 100%; height: 100%; }
+
+    /* ── INFO WINDOW custom ── */
+    .iw-body {
+      font-family: 'Sarabun', sans-serif;
+      min-width: 220px; max-width: 280px;
+    }
+    .iw-header {
+      display: flex; align-items: center; gap: 8px;
+      padding-bottom: 10px; border-bottom: 1px solid #eee; margin-bottom: 10px;
+    }
+    .iw-dot {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--red); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .iw-name { font-size: 14px; font-weight: 700; line-height: 1.3; color: #1a1a1a; }
+    .iw-row  { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; font-size: 12.5px; color: #444; }
+    .iw-row svg { flex-shrink: 0; margin-top: 2px; }
+    .iw-badge {
+      display: inline-block; margin-top: 6px;
+      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    }
+
+    /* ── MOBILE TOGGLE ── */
+    .sidebar-toggle {
+      display: none;
+      position: fixed; bottom: 20px; right: 20px; z-index: 300;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--red); border: none; cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .sidebar-toggle:hover { background: var(--red-dark); }
+    .sidebar-toggle svg { color: white; }
+
+    /* ── MOBILE OVERLAY ── */
+    .overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      z-index: 150; backdrop-filter: blur(2px);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed; top: 60px; left: 0; bottom: 0;
+        z-index: 160; transform: translateX(-100%);
+        width: min(var(--sidebar-w), 90vw);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .overlay.show { display: block; }
+      .sidebar-toggle { display: flex; }
+      header h1 { display: none; }
+    }
+
+    /* ── LOADING ── */
+    .map-loading {
+      position: absolute; inset: 0; background: var(--gray-100);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; color: var(--gray-500);
+      font-size: 14px; z-index: 10;
+    }
+    .spinner {
+      width: 36px; height: 36px; border: 3px solid var(--gray-200);
+      border-top-color: var(--red); border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+      z-index: 10; background: var(--white);
+      border-radius: 24px; padding: 6px 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: var(--shadow);
+      font-size: 12px; font-weight: 500; color: var(--gray-700);
+      white-space: nowrap;
+    }
+    .stats-bar .stat-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      display: inline-block; margin-right: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="header-logo">
+    <div class="logo-icon">iLP</div>
+    <div>
+      <div class="logo-text">iLovePhone</div>
+      <div class="logo-sub">ค้นหาสาขาใกล้คุณ</div>
+    </div>
+  </a>
+  <h1>Store Locator — 10 สาขาทั่วภาคเหนือ</h1>
+</header>
+
+<!-- MOBILE OVERLAY -->
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<!-- MAIN APP -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="ค้นหาสาขา..." oninput="filterBranches()" />
+      </div>
+      <div class="filter-row">
+        <button class="filter-btn active" data-type="all" onclick="setFilter(this,'all')">ทั้งหมด</button>
+        <button class="filter-btn" data-type="owned" onclick="setFilter(this,'owned')">Owned</button>
+        <button class="filter-btn" data-type="franchise" onclick="setFilter(this,'franchise')">Franchise</button>
+        <button class="filter-btn" data-type="partner" onclick="setFilter(this,'partner')">Partner</button>
+      </div>
+      <div class="results-count" id="resultsCount">แสดง 10 สาขา</div>
+    </div>
+    <div class="branch-list" id="branchList"></div>
+  </aside>
+
+  <!-- MAP -->
+  <div class="map-container">
+    <div class="map-loading" id="mapLoading">
+      <div class="spinner"></div>
+      <span>กำลังโหลดแผนที่...</span>
+    </div>
+    <div class="stats-bar" id="statsBar" style="display:none;">
+      <span><span class="stat-dot" style="background:#2e7d32"></span>Owned: <strong id="countOwned">6</strong></span>
+      <span><span class="stat-dot" style="background:#e65100"></span>Franchise: <strong id="countFranchise">0</strong></span>
+      <span><span class="stat-dot" style="background:#1565c0"></span>Partner: <strong id="countPartner">4</strong></span>
+    </div>
+    <div id="map"></div>
+  </div>
+</div>
+
+<!-- MOBILE FAB -->
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="ดูรายชื่อสาขา">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/>
+    <line x1="3" y1="18" x2="15" y2="18"/>
+  </svg>
+</button>
+
+<script>
+/* ═══════════════════════════════
+   BRANCH DATA
+═══════════════════════════════ */
+const BRANCHES = [
+  {
+    id: 1,
+    name: "iLovePhone สาขาหลังมช.",
+    shortName: "หลังมช.",
+    address: "ตรงข้ามประตูคณะศึกษาศาสตร์ มหาวิทยาลัยเชียงใหม่",
+    phone: "089-850-9075",
+    hours: "10:30–21:30",
+    type: "owned",
+    lat: 18.8024,
+    lng: 98.9534,
+    maps: "https://g.co/kgs/16TpzQ7",
+  },
+  {
+    id: 2,
+    name: "iLovePhone สาขามีโชคพลาซ่า",
+    shortName: "มีโชคพลาซ่า",
+    address: "ทางเข้าแมคโดนัล มีโชคพลาซ่า",
+    phone: "089-263-4710",
+    hours: "09:30–20:30",
+    type: "owned",
+    lat: 18.8101,
+    lng: 98.9857,
+    maps: "https://g.co/kgs/g3HRuFJ",
+  },
+  {
+    id: 3,
+    name: "iLovePhone สาขารวมโชคมอลล์",
+    shortName: "รวมโชคมอลล์",
+    address: "ทางเข้า KFC (ร้านอยู่ตึกเดียวกับพิซซ่า)",
+    phone: "083-888-6838",
+    hours: "10:00–21:00",
+    type: "owned",
+    lat: 18.8178,
+    lng: 98.9838,
+    maps: "https://g.co/kgs/JpafwWC",
+  },
+  {
+    id: 4,
+    name: "iLovePhone สาขา 89 พลาซ่า",
+    shortName: "89 พลาซ่า",
+    address: "ข้าง TOP Supermarket, 89 พลาซ่า เชียงใหม่",
+    phone: "095-145-3399",
+    hours: "09:30–20:30",
+    type: "partner",
+    lat: 18.7569,
+    lng: 98.9869,
+    maps: "https://share.google/yIkeMl1wzAlPnCrJi",
+  },
+  {
+    id: 5,
+    name: "iLovePhone สาขาสันป่าตอง",
+    shortName: "สันป่าตอง",
+    address: "ติดธนาคารกสิกรไทย อ.สันป่าตอง",
+    phone: "097-931-4454",
+    hours: "09:00–20:00",
+    type: "owned",
+    lat: 18.6273,
+    lng: 98.8488,
+    maps: "https://g.co/kgs/shv9TC9",
+  },
+  {
+    id: 6,
+    name: "iLovePhone สาขาพร้าว",
+    shortName: "พร้าว",
+    address: "ปั้ม ปตท. พร้าว",
+    phone: "090-227-8188",
+    hours: "08:00–19:00",
+    type: "partner",
+    lat: 19.3641,
+    lng: 99.2062,
+    maps: "https://g.co/kgs/kxi5U1P",
+  },
+  {
+    id: 7,
+    name: "iLovePhone สาขาลำพูน",
+    shortName: "ลำพูน",
+    address: "ตรงข้ามป้าย รพ.ลำพูน",
+    phone: "096-345-1446",
+    hours: "08:00–19:00",
+    type: "owned",
+    lat: 18.5747,
+    lng: 99.0087,
+    maps: "https://g.co/kgs/WBbYcKN",
+  },
+  {
+    id: 8,
+    name: "iLovePhone สาขาสี่คิ้ว",
+    shortName: "สี่คิ้ว (โคราช)",
+    address: "อำเภอสี่คิ้ว จ.นครราชสีมา",
+    phone: "097-959-3636",
+    hours: "09:00–20:00",
+    type: "owned",
+    lat: 14.8861,
+    lng: 101.9189,
+    maps: "https://share.google/EeIuVUsCgNUSk96zN",
+  },
+  {
+    id: 9,
+    name: "iLovePhone PARTNER สาขาแม่สะเรียง",
+    shortName: "แม่สะเรียง",
+    address: "อ.แม่สะเรียง จ.แม่ฮ่องสอน",
+    phone: "092-631-6697",
+    hours: "09:00–19:00",
+    type: "partner",
+    lat: 18.1678,
+    lng: 97.9350,
+    maps: "https://maps.app.goo.gl/xxH2ZD25dn5sDXJj6",
+  },
+  {
+    id: 10,
+    name: "iLovePhone PARTNER เฟิร์สทโฟน แม่โจ้",
+    shortName: "เฟิร์สทโฟน แม่โจ้",
+    address: "181/255 ม.10 อ.สันทราย เชียงใหม่ 50210",
+    phone: "080-524-5624",
+    hours: "11:00–20:00",
+    type: "partner",
+    lat: 18.8942,
+    lng: 99.0175,
+    maps: "https://maps.app.goo.gl/YjXwb2C92HGZKEHm7",
+  },
+];
+
+/* ═══════════════════════════════
+   STATE
+═══════════════════════════════ */
+let map, markers = {}, infoWindow, activeCardId = null, currentFilter = "all";
+
+/* ═══════════════════════════════
+   HELPERS
+═══════════════════════════════ */
+const typeLabel = { owned: "Owned", franchise: "Franchise", partner: "Partner" };
+const badgeClass = { owned: "badge-owned", franchise: "badge-franchise", partner: "badge-partner" };
+
+function typeColor(type) {
+  return { owned: "#2e7d32", franchise: "#e65100", partner: "#1565c0" }[type] || "#E31837";
+}
+
+function phoneUrl(p) { return "tel:" + p.replace(/-/g,""); }
+
+/* ═══════════════════════════════
+   RENDER SIDEBAR
+═══════════════════════════════ */
+function renderList(items) {
+  const list = document.getElementById("branchList");
+  const count = document.getElementById("resultsCount");
+
+  if (!items.length) {
+    list.innerHTML = `<div class="no-results">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <line x1="8" y1="11" x2="14" y2="11"/>
+      </svg>
+      <p>ไม่พบสาขาที่ค้นหา</p>
+    </div>`;
+    count.textContent = "ไม่พบสาขา";
+    return;
+  }
+
+  count.textContent = `แสดง ${items.length} สาขา`;
+
+  list.innerHTML = items.map(b => `
+    <div class="branch-card ${activeCardId === b.id ? "active" : ""}"
+         id="card-${b.id}" onclick="selectBranch(${b.id})">
+      <div class="branch-header">
+        <div class="branch-name">${b.name}</div>
+        <span class="badge ${badgeClass[b.type]}">${typeLabel[b.type]}</span>
+      </div>
+      <div class="branch-address">${b.address}</div>
+      <div class="branch-meta">
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.22 2.18 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.88 6.88l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+          ${b.phone}
+        </span>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          ${b.hours}
+        </span>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ═══════════════════════════════
+   FILTER
+═══════════════════════════════ */
+function getFiltered() {
+  const q = document.getElementById("searchInput").value.trim().toLowerCase();
+  return BRANCHES.filter(b => {
+    const matchType = currentFilter === "all" || b.type === currentFilter;
+    const matchQ = !q ||
+      b.name.toLowerCase().includes(q) ||
+      b.address.toLowerCase().includes(q) ||
+      b.shortName.toLowerCase().includes(q);
+    return matchType && matchQ;
+  });
+}
+
+function filterBranches() {
+  const filtered = getFiltered();
+  renderList(filtered);
+
+  // show/hide markers
+  BRANCHES.forEach(b => {
+    if (markers[b.id]) {
+      markers[b.id].setVisible(filtered.some(f => f.id === b.id));
+    }
+  });
+}
+
+function setFilter(btn, type) {
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  currentFilter = type;
+  filterBranches();
+}
+
+/* ═══════════════════════════════
+   SELECT BRANCH
+═══════════════════════════════ */
+function selectBranch(id) {
+  const branch = BRANCHES.find(b => b.id === id);
+  if (!branch || !map) return;
+
+  // update active card
+  if (activeCardId) {
+    const prev = document.getElementById(`card-${activeCardId}`);
+    if (prev) prev.classList.remove("active");
+  }
+  activeCardId = id;
+  const card = document.getElementById(`card-${id}`);
+  if (card) {
+    card.classList.add("active");
+    card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  // zoom map
+  map.panTo({ lat: branch.lat, lng: branch.lng });
+  map.setZoom(16);
+
+  // open info window
+  openInfoWindow(branch);
+
+  // close mobile sidebar
+  if (window.innerWidth <= 768) closeSidebar();
+}
+
+/* ═══════════════════════════════
+   INFO WINDOW
+═══════════════════════════════ */
+function buildInfoContent(b) {
+  const color = typeColor(b.type);
+  return `
+    <div class="iw-body">
+      <div class="iw-header">
+        <div class="iw-dot">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white" stroke="none">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3" fill="white" opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="iw-name">${b.name}</div>
+      </div>
+      <div class="iw-row">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>${b.address}</span>
+      </div>
+      <div class="iw-row">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.22 2.18 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.88 6.88l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+        </svg>
+        <a href="${phoneUrl(b.phone)}" style="color:#E31837;text-decoration:none;font-weight:600">${b.phone}</a>
+      </div>
+      <div class="iw-row">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>เปิด ${b.hours}</span>
+      </div>
+      <span class="iw-badge" style="background:${color}22;color:${color}">${typeLabel[b.type]}</span>
+    </div>
+  `;
+}
+
+function openInfoWindow(branch) {
+  if (!infoWindow) return;
+  infoWindow.setContent(buildInfoContent(branch));
+  infoWindow.open(map, markers[branch.id]);
+}
+
+/* ═══════════════════════════════
+   GOOGLE MAPS INIT
+═══════════════════════════════ */
+function initMap() {
+  document.getElementById("mapLoading").style.display = "none";
+  document.getElementById("statsBar").style.display = "flex";
+
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 18.7, lng: 99.0 },
+    zoom: 8,
+    mapTypeControl: false,
+    fullscreenControl: true,
+    streetViewControl: false,
+    styles: [
+      { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+      { featureType: "transit", elementType: "labels", stylers: [{ visibility: "off" }] },
+      { featureType: "road", elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
+      { featureType: "water", elementType: "geometry", stylers: [{ color: "#c9e6f5" }] },
+      { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#f0f0f0" }] },
+    ],
+  });
+
+  infoWindow = new google.maps.InfoWindow({ maxWidth: 300 });
+
+  // SVG marker builder
+  function makeSvgMarker(color) {
+    return {
+      path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z",
+      fillColor: color,
+      fillOpacity: 1,
+      strokeColor: "#fff",
+      strokeWeight: 2,
+      scale: 1.6,
+      anchor: new google.maps.Point(12, 22),
+    };
+  }
+
+  const colors = { owned: "#E31837", franchise: "#e65100", partner: "#1565c0" };
+
+  BRANCHES.forEach(b => {
+    const marker = new google.maps.Marker({
+      position: { lat: b.lat, lng: b.lng },
+      map,
+      title: b.name,
+      icon: makeSvgMarker(colors[b.type] || "#E31837"),
+      animation: google.maps.Animation.DROP,
+    });
+
+    marker.addListener("click", () => selectBranch(b.id));
+    markers[b.id] = marker;
+  });
+
+  renderList(BRANCHES);
+}
+
+/* ═══════════════════════════════
+   MOBILE SIDEBAR
+═══════════════════════════════ */
+function toggleSidebar() {
+  const s = document.getElementById("sidebar");
+  const o = document.getElementById("overlay");
+  const open = s.classList.toggle("open");
+  o.classList.toggle("show", open);
+}
+function closeSidebar() {
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("overlay").classList.remove("show");
+}
+</script>
+
+<!-- GOOGLE MAPS API — replace YOUR_API_KEY with actual key -->
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfjjCTqzytVbbb3sQJn2Pc5gj0w_oWRzc&callback=initMap&language=th&region=TH"
+  async defer
+></script>
+
+</body>
+</html>
