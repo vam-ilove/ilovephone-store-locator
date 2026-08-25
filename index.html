@@ -264,7 +264,7 @@
       <div class="logo-sub">ค้นหาสาขาใกล้คุณ</div>
     </div>
   </a>
-  <h1>Store Locator — 10 สาขาทั่วภาคเหนือ</h1>
+  <h1>Store Locator — 13 สาขาทั่วประเทศ</h1>
 </header>
 
 <!-- MOBILE OVERLAY -->
@@ -288,7 +288,7 @@
         <button class="filter-btn" data-type="franchise" onclick="setFilter(this,'franchise')">Franchise</button>
         <button class="filter-btn" data-type="partner" onclick="setFilter(this,'partner')">Partner</button>
       </div>
-      <div class="results-count" id="resultsCount">แสดง 10 สาขา</div>
+      <div class="results-count" id="resultsCount">แสดง 13 สาขา</div>
     </div>
     <div class="branch-list" id="branchList"></div>
   </aside>
@@ -302,7 +302,7 @@
     <div class="stats-bar" id="statsBar" style="display:none;">
       <span><span class="stat-dot" style="background:#2e7d32"></span>Owned: <strong id="countOwned">6</strong></span>
       <span><span class="stat-dot" style="background:#e65100"></span>Franchise: <strong id="countFranchise">0</strong></span>
-      <span><span class="stat-dot" style="background:#1565c0"></span>Partner: <strong id="countPartner">4</strong></span>
+      <span><span class="stat-dot" style="background:#1565c0"></span>Partner: <strong id="countPartner">7</strong></span>
     </div>
     <div id="map"></div>
   </div>
@@ -440,6 +440,42 @@ const BRANCHES = [
     lat: 18.8853090,
     lng: 99.0267331,
     maps: "https://maps.app.goo.gl/YjXwb2C92HGZKEHm7",
+  },
+  {
+    id: 11,
+    name: "iLovePhone PARTNER ฮับ เซอร์วิส (แน็ตตี้)",
+    shortName: "ฮับ เซอร์วิส น่าน",
+    address: "329 หมู่ 2 ตำบลผาสิงห์ อำเภอเมือง จังหวัดน่าน 55000",
+    phone: "065-343-9885",
+    hours: "07:00–21:00",
+    type: "partner",
+    lat: 18.7856,
+    lng: 100.7780,
+    maps: "https://share.google/X0FPCoNGLvnaYlhTc",
+  },
+  {
+    id: 12,
+    name: "iLovePhone PARTNER นิว&น้ำ โมบาย",
+    shortName: "นิว&น้ำ ลำพูน",
+    address: "ตลาดริมปิง 68 ถนนจามเทวี ตำบลริมปิง อำเภอเมืองลำพูน จังหวัดลำพูน 51000",
+    phone: "094-087-5257",
+    hours: "09:00–19:00",
+    type: "partner",
+    lat: 18.5871,
+    lng: 98.9871,
+    maps: "https://maps.app.goo.gl/Zh4Y7rwpEtEt2NQj7",
+  },
+  {
+    id: 13,
+    name: "iLovePhone PARTNER คุณหลวงโมบาย",
+    shortName: "คุณหลวง แม่แจ่ม",
+    address: "อำเภอแม่แจ่ม จังหวัดเชียงใหม่",
+    phone: "-",
+    hours: "09:00–19:00",
+    type: "partner",
+    lat: 18.7878,
+    lng: 98.1526,
+    maps: "https://goo.gl/maps/KqSt16MyxCshzZeZ9",
   },
 ];
 
