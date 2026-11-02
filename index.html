@@ -264,7 +264,7 @@
       <div class="logo-sub">ค้นหาสาขาใกล้คุณ</div>
     </div>
   </a>
-  <h1>Store Locator — 14 สาขาทั่วประเทศ</h1>
+  <h1>Store Locator — 15 สาขาทั่วประเทศ</h1>
 </header>
 
 <!-- MOBILE OVERLAY -->
@@ -288,7 +288,7 @@
         <button class="filter-btn" data-type="franchise" onclick="setFilter(this,'franchise')">Franchise</button>
         <button class="filter-btn" data-type="partner" onclick="setFilter(this,'partner')">Partner</button>
       </div>
-      <div class="results-count" id="resultsCount">แสดง 14 สาขา</div>
+      <div class="results-count" id="resultsCount">แสดง 15 สาขา</div>
     </div>
     <div class="branch-list" id="branchList"></div>
   </aside>
@@ -302,7 +302,7 @@
     <div class="stats-bar" id="statsBar" style="display:none;">
       <span><span class="stat-dot" style="background:#2e7d32"></span>Owned: <strong id="countOwned">6</strong></span>
       <span><span class="stat-dot" style="background:#e65100"></span>Franchise: <strong id="countFranchise">1</strong></span>
-      <span><span class="stat-dot" style="background:#1565c0"></span>Partner: <strong id="countPartner">7</strong></span>
+      <span><span class="stat-dot" style="background:#1565c0"></span>Partner: <strong id="countPartner">8</strong></span>
     </div>
     <div id="map"></div>
   </div>
@@ -385,13 +385,13 @@ const BRANCHES = [
     id: 6,
     name: "iLovePhone สาขาพร้าว",
     shortName: "พร้าว",
-    address: "380/3 ต.เวียง อ.พร้าว จ.เชียงใหม่",
+    address: "308/3 หมู่ 4 ต.เวียง อ.พร้าว จ.เชียงใหม่ 50190",
     phone: "095-985-5499",
     hours: "09:00–19:00",
     type: "partner",
-    lat: 19.3689248,
-    lng: 99.2004928,
-    maps: "https://g.co/kgs/kxi5U1P",
+    lat: 19.3689021,
+    lng: 99.2001987,
+    maps: "https://maps.app.goo.gl/2aqN77fATyB3PJZs5",
   },
   {
     id: 7,
@@ -409,21 +409,21 @@ const BRANCHES = [
     id: 8,
     name: "iLovePhone สาขาสี่คิ้ว",
     shortName: "สี่คิ้ว (โคราช)",
-    address: "อำเภอสี่คิ้ว จ.นครราชสีมา",
+    address: "178-179 ม.15 ถ.ชุมค้า ต.สีคิ้ว อ.สีคิ้ว จ.นครราชสีมา 30140",
     phone: "097-959-3636",
-    hours: "09:00–20:00",
+    hours: "08:00–19:30",
     type: "owned",
-    lat: 14.8900959,
-    lng: 101.7241352,
-    maps: "https://share.google/EeIuVUsCgNUSk96zN",
+    lat: 14.8901230,
+    lng: 101.7240350,
+    maps: "https://maps.app.goo.gl/VRtGQjfdkGBCEHRs9",
   },
   {
     id: 9,
     name: "iLovePhone PARTNER สาขาแม่สะเรียง",
     shortName: "แม่สะเรียง",
-    address: "อ.แม่สะเรียง จ.แม่ฮ่องสอน",
+    address: "391/6 ม.12 ต.บ้านกาศ อ.แม่สะเรียง จ.แม่ฮ่องสอน",
     phone: "092-631-6697",
-    hours: "09:00–19:00",
+    hours: "08:00–19:00",
     type: "partner",
     lat: 18.1680314,
     lng: 97.9343018,
@@ -469,9 +469,9 @@ const BRANCHES = [
     id: 13,
     name: "iLovePhone PARTNER คุณหลวงโมบาย",
     shortName: "คุณหลวง แม่แจ่ม",
-    address: "อำเภอแม่แจ่ม จังหวัดเชียงใหม่",
-    phone: "-",
-    hours: "09:00–19:00",
+    address: "193 ม.11 ต.แม่ศึก อ.แม่แจ่ม จ.เชียงใหม่ 50270",
+    phone: "093-834-6616",
+    hours: "07:30–18:00 (อา-ศ) / 12:00–19:00 (ส)",
     type: "partner",
     lat: 18.7878,
     lng: 98.1526,
@@ -488,6 +488,18 @@ const BRANCHES = [
     lat: 18.9190,
     lng: 98.9432,
     maps: "https://share.google/puFPj0v1nBq3RfB5X",
+  },
+  {
+    id: 15,
+    name: "iLovePhone PARTNER carephone cnx",
+    shortName: "carephone สันป่าตอง",
+    address: "277 ม.1 ต.สันกลาง อ.สันป่าตอง จ.เชียงใหม่",
+    phone: "082-558-5550",
+    hours: "09:00–17:00",
+    type: "partner",
+    lat: 18.6485045,
+    lng: 98.8928284,
+    maps: "https://maps.app.goo.gl/rNBou3npnGAKTN8F8",
   },
 ];
 
