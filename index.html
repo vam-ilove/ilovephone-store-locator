@@ -264,7 +264,7 @@
       <div class="logo-sub">ค้นหาสาขาใกล้คุณ</div>
     </div>
   </a>
-  <h1>Store Locator — 15 สาขาทั่วประเทศ</h1>
+  <h1>ค้นหาร้าน iLovePhone — สาขาบริษัท 5 แห่ง แฟรนไชส์ และร้านพาร์ทเนอร์</h1>
 </header>
 
 <!-- MOBILE OVERLAY -->
@@ -288,7 +288,7 @@
         <button class="filter-btn" data-type="franchise" onclick="setFilter(this,'franchise')">Franchise</button>
         <button class="filter-btn" data-type="partner" onclick="setFilter(this,'partner')">Partner</button>
       </div>
-      <div class="results-count" id="resultsCount">แสดง 15 สาขา</div>
+      <div class="results-count" id="resultsCount">แสดง 15 ร้าน</div>
     </div>
     <div class="branch-list" id="branchList"></div>
   </aside>
@@ -300,9 +300,9 @@
       <span>กำลังโหลดแผนที่...</span>
     </div>
     <div class="stats-bar" id="statsBar" style="display:none;">
-      <span><span class="stat-dot" style="background:#2e7d32"></span>Owned: <strong id="countOwned">6</strong></span>
+      <span><span class="stat-dot" style="background:#2e7d32"></span>Owned: <strong id="countOwned">5</strong></span>
       <span><span class="stat-dot" style="background:#e65100"></span>Franchise: <strong id="countFranchise">1</strong></span>
-      <span><span class="stat-dot" style="background:#1565c0"></span>Partner: <strong id="countPartner">8</strong></span>
+      <span><span class="stat-dot" style="background:#1565c0"></span>Partner: <strong id="countPartner">9</strong></span>
     </div>
     <div id="map"></div>
   </div>
@@ -359,7 +359,7 @@ const BRANCHES = [
   },
   {
     id: 4,
-    name: "iLovePhone สาขา 89 พลาซ่า",
+    name: "iLovePhone PARTNER 89 พลาซ่า",
     shortName: "89 พลาซ่า",
     address: "ข้าง TOP Supermarket, 89 พลาซ่า เชียงใหม่",
     phone: "095-145-3399",
@@ -383,7 +383,7 @@ const BRANCHES = [
   },
   {
     id: 6,
-    name: "iLovePhone สาขาพร้าว",
+    name: "iLovePhone PARTNER พร้าว",
     shortName: "พร้าว",
     address: "308/3 หมู่ 4 ต.เวียง อ.พร้าว จ.เชียงใหม่ 50190",
     phone: "095-985-5499",
@@ -407,19 +407,19 @@ const BRANCHES = [
   },
   {
     id: 8,
-    name: "iLovePhone สาขาสี่คิ้ว",
-    shortName: "สี่คิ้ว (โคราช)",
+    name: "iLovePhone PARTNER สีคิ้ว",
+    shortName: "สีคิ้ว (โคราช)",
     address: "178-179 ม.15 ถ.ชุมค้า ต.สีคิ้ว อ.สีคิ้ว จ.นครราชสีมา 30140",
     phone: "097-959-3636",
     hours: "08:00–19:30",
-    type: "owned",
+    type: "partner",
     lat: 14.8901230,
     lng: 101.7240350,
     maps: "https://maps.app.goo.gl/VRtGQjfdkGBCEHRs9",
   },
   {
     id: 9,
-    name: "iLovePhone PARTNER สาขาแม่สะเรียง",
+    name: "iLovePhone PARTNER แม่สะเรียง",
     shortName: "แม่สะเรียง",
     address: "391/6 ม.12 ต.บ้านกาศ อ.แม่สะเรียง จ.แม่ฮ่องสอน",
     phone: "092-631-6697",
@@ -533,13 +533,13 @@ function renderList(items) {
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         <line x1="8" y1="11" x2="14" y2="11"/>
       </svg>
-      <p>ไม่พบสาขาที่ค้นหา</p>
+      <p>ไม่พบร้านที่ค้นหา</p>
     </div>`;
-    count.textContent = "ไม่พบสาขา";
+    count.textContent = "ไม่พบร้าน";
     return;
   }
 
-  count.textContent = `แสดง ${items.length} สาขา`;
+  count.textContent = `แสดง ${items.length} ร้าน`;
 
   list.innerHTML = items.map(b => `
     <div class="branch-card ${activeCardId === b.id ? "active" : ""}"
